@@ -16,7 +16,15 @@ def train_model(feature_df, model_path, scaler_path):
     detector.scaler.fit(feature_df[detector.feature_columns].values)
     X_scaled = detector.scaler.transform(feature_df[detector.feature_columns].values)
     detector.model.fit(X_scaled, feature_df['class'].values)
-  
+    
+    # Сохранение модели и скейлера
+    with open(model_path, 'wb') as f:
+        pickle.dump(detector.model, f)
+    with open(scaler_path, 'wb') as f:
+        pickle.dump(detector.scaler, f)
+    
+    print(f"Модель сохранена в {model_path}")
+    print(f"Скейлер сохранен в {scaler_path}")
     print(f"Точность на обучающих данных: {detector.model.score(X_scaled, feature_df['class'].values):.4f}")
 
 def main():
